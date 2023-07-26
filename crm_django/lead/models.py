@@ -28,7 +28,7 @@ class Lead(models.Model):
         (MEDIUM, 'Medium'),
         (HIGH, 'High'),
     )
-
+    id = models.AutoField(primary_key=True)
     company = models.CharField(max_length=225)
     contact = models.CharField(max_length=225)
     email = models.EmailField()
@@ -46,4 +46,4 @@ class Lead(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
-        return super().__str__()
+        return self.company

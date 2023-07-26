@@ -14,6 +14,7 @@ class LeasSerializers(serializers.ModelSerializer):
             'modified_at'
         )
         fields = (
+            'id',
             'company',
             'contact',
             'email',
@@ -23,4 +24,6 @@ class LeasSerializers(serializers.ModelSerializer):
             'estimated_value',
             'status',
             'priority',
+            'created_at',
+            'modified_at'
         )
