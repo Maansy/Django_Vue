@@ -46,7 +46,7 @@
 
 <script>
 import axios from 'axios'
-import {toast} from 'bulma-toast'
+import { toast } from 'bulma-toast'
 export default {
     name: 'SignUp',
     data() {
@@ -58,47 +58,52 @@ export default {
         }
     },
     methods: {
-        submitForm() {
-            this.errors =[]
-            if(this.username === ''){
+        async submitForm() {
+
+            this.$store.commit('setIsLoading', true)
+
+
+            this.errors = []
+            if (this.username === '') {
                 this.errors.push('The username is missing')
             }
-            if(this.password1 === ''){
+            if (this.password1 === '') {
                 this.errors.push('The password is too short')
             }
-            if(this.password1 !== this.password2){
+            if (this.password1 !== this.password2) {
                 this.errors.push('The password are not matching')
             }
-            if(!this.errors.length){
+            if (!this.errors.length) {
                 const formData = {
                     username: this.username,
                     password: this.password1
                 }
                 // send the two values to the backend
-                axios
-                .post('/api/v1/users/', formData)
-                .then(response => {
-                    toast({
-                        message: 'Account was created',
-                        type: 'is-success',
-                        dismissible: true,
-                        pauseOnHover:true,
-                        duration:2000,
-                        position:'bottom-right'
-                    }) 
+                await axios
+                    .post('/api/v1/users/', formData)
+                    .then(response => {
+                        toast({
+                            message: 'Account was created',
+                            type: 'is-success',
+                            dismissible: true,
+                            pauseOnHover: true,
+                            duration: 2000,
+                            position: 'bottom-right'
+                        })
 
-                    this.$router.push('/log-in')
-                })
-                .catch(error => {
-                    if (error.response){
-                        for(const property in error.response.data){
-                            this.errors.push(`${property}:${error.response.data[property]}`)
+                        this.$router.push('/log-in')
+                    })
+                    .catch(error => {
+                        if (error.response) {
+                            for (const property in error.response.data) {
+                                this.errors.push(`${property}:${error.response.data[property]}`)
+                            }
+                        } else if (error.message) {
+                            this.errors.push('Something went wrong, Please try again later')
                         }
-                    } else if(error.message){
-                        this.errors.push('Something went wrong, Please try again later')
-                    }
-                })
+                    })
             }
+            this.$store.commit('setIsLoading', false)
 
         }
     }
